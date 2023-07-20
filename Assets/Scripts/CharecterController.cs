@@ -67,7 +67,6 @@ public class CharecterController : MonoBehaviour
         // Jump
         if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
         {
-            Debug.Log("here");
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
 
@@ -76,10 +75,10 @@ public class CharecterController : MonoBehaviour
 
         controller.Move(currentDirection * currentSpeed * Time.deltaTime);
 
-        if(Input.GetKeyDown(KeyCode.E) && carryObject != null){
+        if(Input.GetKey(KeyCode.E) && carryObject != null){
             carryObject.SetParent(this.transform);
         }
-        if(Input.GetKeyDown(KeyCode.Q) && carryObject != null){
+        if(Input.GetKey(KeyCode.Q) && carryObject != null){
             carryObject.SetParent(null);
             carryObject = null;
         }
