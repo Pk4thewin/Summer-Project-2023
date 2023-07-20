@@ -1,14 +1,13 @@
 using UnityEngine;
 using System.Collections;
+
 public class WaveSpawner : MonoBehaviour
 {
-    //allow for multiple spawners
     public Transform enemyPrefab;
-    public Transform spawnPoint;
+    public Transform[] spawnPoints; // an array of spawn points
     public float timeBetwweenWaves;
     private float countDown = 2f;
     private int waveCount = 1;
-
 
     void Update(){
         if(countDown <= 0f){
@@ -17,6 +16,7 @@ public class WaveSpawner : MonoBehaviour
         }
         countDown -= Time.deltaTime;
     }
+    
     IEnumerator SpawnWave(){
         for(int i = 0; i < waveCount; i++){
             SpawnEnemy();
@@ -24,7 +24,10 @@ public class WaveSpawner : MonoBehaviour
         }
         waveCount++;
     }
+    
     void SpawnEnemy(){
+        // select a random spawn point from the array
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
         Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
     }
 }
