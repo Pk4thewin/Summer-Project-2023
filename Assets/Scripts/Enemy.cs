@@ -3,31 +3,29 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float speed = 10f;
-
-    private Transform target;
+    private Path path;
     private int wavePointIndex = 0;
 
-    void Start()
+    public void SetPath(Path newPath)
     {
-        target = Waypoints.points[0];
+        path = newPath;
     }
     void Update()
     {
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = path.GetWaypoint(wavePointIndex).position - transform.position;
         transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
 
-        if(Vector3.Distance(transform.position, target.position) <= 0.2f)
+        if(Vector3.Distance(transform.position, path.GetWaypoint(wavePointIndex).position) <= 0.2f)
         {
             GetNextWaypoint();
         }
     }
     void GetNextWaypoint()
     {
-        if(wavePointIndex>= Waypoints.points.Length - 1)
+        if(wavePointIndex>= path.GetPathLength() - 1)
         {
             Destroy(gameObject);
         }
         wavePointIndex++;
-        target = Waypoints.points[wavePointIndex];
     }
 }

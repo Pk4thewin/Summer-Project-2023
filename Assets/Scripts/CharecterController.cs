@@ -14,6 +14,24 @@ public class CharecterController : MonoBehaviour
     public float turnSmoothTime = 0.1f; 
     private float turnSmoothVelocity;
     private Vector3 currentDirection = Vector3.zero;
+    private Transform carryObject;
+    public float gravityValue = -9.81f;
+    public bool isGrounded = true;
+    public float jumpHeight = 2.0f;
+    private float groundCheckDistance = 0.1f;
+    
+
+    void OnTriggerStay(Collider other){
+        if(other.gameObject.CompareTag("Pickupable")){
+            carryObject = other.transform;
+        }
+    }
+
+    void OnTriggerExit(Collider other){
+        if(other.gameObject.CompareTag("Pickupable")){
+            carryObject = null;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +42,7 @@ public class CharecterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrounded = IsPlayerGrounded();
         Vector3 targetDirection = new Vector3(Input.GetAxis("Horizontal"), 0 , Input.GetAxis("Vertical"));
         if(targetDirection.magnitude >= 0.1f) // add a deadzone to ignore small inputs
         {
@@ -40,7 +59,33 @@ public class CharecterController : MonoBehaviour
             currentSpeed = Mathf.SmoothDamp(currentSpeed, 0, ref speedSmoothVelocity, speedSmoothTime);
         }
 
+        if (controller.isGrounded && playerVelocity.y < 0)
+        {
+            playerVelocity.y = 0f;
+        }
+
+        // Jump
+        if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
+        {
+            Debug.Log("here");
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+        }
+
+        playerVelocity.y += gravityValue * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
+
         controller.Move(currentDirection * currentSpeed * Time.deltaTime);
-        controller.Move(playerVelocity*Time.deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.E) && carryObject != null){
+            carryObject.SetParent(this.transform);
+        }
+        if(Input.GetKeyDown(KeyCode.Q) && carryObject != null){
+            carryObject.SetParent(null);
+            carryObject = null;
+        }
+    }
+    bool IsPlayerGrounded() 
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, controller.bounds.extents.y + groundCheckDistance);
     }
 }

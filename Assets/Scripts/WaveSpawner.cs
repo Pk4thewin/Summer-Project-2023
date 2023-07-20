@@ -4,7 +4,7 @@ using System.Collections;
 public class WaveSpawner : MonoBehaviour
 {
     public Transform enemyPrefab;
-    public Transform[] spawnPoints; // an array of spawn points
+    public Path[] paths;
     public float timeBetwweenWaves;
     private float countDown = 2f;
     private int waveCount = 1;
@@ -27,7 +27,9 @@ public class WaveSpawner : MonoBehaviour
     
     void SpawnEnemy(){
         // select a random spawn point from the array
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        Path spawnPath = paths[Random.Range(0, paths.Length)];
+        Transform enemy = Instantiate(enemyPrefab, spawnPath.GetWaypoint(0).position, Quaternion.identity);
+        Enemy enemyScript = enemy.GetComponent<Enemy>();
+        enemyScript.SetPath(spawnPath);
     }
 }

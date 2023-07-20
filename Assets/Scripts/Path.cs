@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class Path
+public class Path : MonoBehaviour
 {
     public Transform[] waypoints;
 
