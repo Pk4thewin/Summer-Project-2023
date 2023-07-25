@@ -14,24 +14,11 @@ public class CharecterController : MonoBehaviour
     public float turnSmoothTime = 0.1f; 
     private float turnSmoothVelocity;
     private Vector3 currentDirection = Vector3.zero;
-    private Transform carryObject;
     public float gravityValue = -9.81f;
     public bool isGrounded = true;
     public float jumpHeight = 2.0f;
     private float groundCheckDistance = 0.1f;
     
-
-    void OnTriggerStay(Collider other){
-        if(other.gameObject.CompareTag("Pickupable")){
-            carryObject = other.transform;
-        }
-    }
-
-    void OnTriggerExit(Collider other){
-        if(other.gameObject.CompareTag("Pickupable")){
-            carryObject = null;
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -75,13 +62,6 @@ public class CharecterController : MonoBehaviour
 
         controller.Move(currentDirection * currentSpeed * Time.deltaTime);
 
-        if(Input.GetKey(KeyCode.E) && carryObject != null){
-            carryObject.SetParent(this.transform);
-        }
-        if(Input.GetKey(KeyCode.Q) && carryObject != null){
-            carryObject.SetParent(null);
-            carryObject = null;
-        }
     }
     bool IsPlayerGrounded() 
     {
