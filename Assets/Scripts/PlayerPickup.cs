@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerPickup : MonoBehaviour
 {
-    private Transform _transform;
-    private Transform carriedObject;
-    private bool hasItem;
+    public Transform _transform;
+    public Transform carriedObject;
+    public bool hasItem;
+    public bool isHolding;
 
     void Start()
     {
@@ -22,30 +23,32 @@ public class PlayerPickup : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (carriedObject != null && hasItem)
-        {
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                carriedObject.position = _transform.position;
-            }
-        }
-        else if (!hasItem && carriedObject != null)
-        {
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                hasItem = true; 
-            }
-        }
-    }
-
     private void OnTriggerExit(Collider other)
     {
         if (carriedObject == other.transform)
         {
             carriedObject = null;
             hasItem = false;
+        }
+    }
+
+    void Update()
+    {
+        // Check if the object is being carried and the left mouse button is pressed
+        if (carriedObject != null && !hasItem && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            isHolding = true;
+            hasItem = true;
+        }else if(hasItem && Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            hasItem = false;
+            isHolding = false;
+        }
+        
+        // Move the carried object while the left mouse button is held down
+        if (isHolding)
+        {
+            carriedObject.position = _transform.position;
         }
     }
 }
