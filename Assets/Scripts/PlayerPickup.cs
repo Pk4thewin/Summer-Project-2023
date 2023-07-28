@@ -39,6 +39,9 @@ public class PlayerPickup : MonoBehaviour
         {
             isHolding = true;
             hasItem = true;
+            if(carriedObject.gameObject.name == "Turret"){
+                
+            }
         }else if(hasItem && Input.GetKeyDown(KeyCode.Mouse0))
         {
             hasItem = false;

@@ -10,12 +10,14 @@ public class Turret : MonoBehaviour
     public float fireRate = 1;
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public bool beingHeld;
     private float cooldown = 0;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        beingHeld = false;
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 
@@ -49,7 +51,7 @@ public class Turret : MonoBehaviour
         turretRotation.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
 
-        if(cooldown <= 0f){
+        if(cooldown <= 0f && !beingHeld){
             Shoot();
             cooldown = 1f/fireRate;
         }
