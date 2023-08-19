@@ -25,11 +25,8 @@ public class PlayerPickup : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (carriedObject == other.transform)
-        {
-            carriedObject = null;
-            hasItem = false;
-        }
+        carriedObject = null;
+        hasItem = false;
     }
 
     void Update()

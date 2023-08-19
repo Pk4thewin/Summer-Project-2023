@@ -51,12 +51,6 @@ public class CharecterController : MonoBehaviour
             playerVelocity.y = 0f;
         }
 
-        // Jump
-        if (Input.GetKey(KeyCode.Space) && controller.isGrounded)
-        {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        }
-
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
